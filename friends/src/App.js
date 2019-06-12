@@ -28,7 +28,7 @@ class App extends React.Component {
     return (
       <div className="App">
         <Friends 
-        friendsList={this.state.friends}
+        friendsData={this.state.friends}
         />
       </div>
     );
