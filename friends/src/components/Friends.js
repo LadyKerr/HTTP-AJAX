@@ -1,18 +1,10 @@
 import React from 'react';
 
-class Friends extends React.Component {
-  constructor () {
-    super();
-  }
-
-render() {
+const Friends = props => {
   return (
     <div>
-      <h1>Hello Im from Friends Component</h1>
+      <h1>Hi there!</h1>
     </div>
   );
 }
-
-}
-
 export default Friends;
