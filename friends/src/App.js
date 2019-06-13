@@ -7,7 +7,8 @@ class App extends React.Component {
   constructor () {
     super();
     this.state = {
-      friends: []
+      friends: [],
+      postNewFriend: '',
     }
   }
 
@@ -16,11 +17,20 @@ class App extends React.Component {
     axios
     .get("http://localhost:5000/friends")
     .then(response => {
-      console.log(response);
       this.setState({ friends: response.data })
     })
     .catch(error => {
       console.log(error);
+    })
+  }
+
+  postFriend = friend => {
+    axios.post("http://localhost:5000/friends", friend)
+    .then(response => {
+      console.log(response);
+      this.setState({
+        postNewFriend: response.data.newFriend
+      });
     })
   }
 
@@ -29,6 +39,7 @@ class App extends React.Component {
       <div className="App">
         <Friends 
           friendsData={this.state.friends}
+          postFriend={this.postFriend}
         />
       </div>
     );

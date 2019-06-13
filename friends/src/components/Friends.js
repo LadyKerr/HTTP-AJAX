@@ -1,6 +1,7 @@
 import React from 'react';
 import FriendsForm from './FriendsForm';
 
+
 const Friends = props => {
   return (
     <div>
