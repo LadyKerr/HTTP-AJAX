@@ -15,9 +15,9 @@ class App extends React.Component {
   componentDidMount() {
     axios
     .get("http://localhost:5000/friends")
-    .then(resolved => {
-      console.log(resolved);
-      this.setState({ friends: resolved.data })
+    .then(response => {
+      console.log(response);
+      this.setState({ friends: response.data })
     })
     .catch(error => {
       console.log(error);
@@ -28,7 +28,7 @@ class App extends React.Component {
     return (
       <div className="App">
         <Friends 
-        friendsData={this.state.friends}
+          friendsData={this.state.friends}
         />
       </div>
     );
