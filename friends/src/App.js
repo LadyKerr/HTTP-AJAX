@@ -1,6 +1,8 @@
 import React from 'react';
 import axios from 'axios';
 import Friends from './components/Friends';
+import FriendsForm from './components/FriendsForm';
+
 import './App.css';
 
 class App extends React.Component {
@@ -12,7 +14,7 @@ class App extends React.Component {
     }
   }
 
-  //setState to friends: res.friends
+  //setState to friends: res.data
   componentDidMount() {
     axios
     .get("http://localhost:5000/friends")
@@ -25,13 +27,28 @@ class App extends React.Component {
   }
 
   postFriend = friend => {
-    axios.post("http://localhost:5000/friends", friend)
-    .then(response => {
-      console.log(response);
-      this.setState({
-        postNewFriend: response.data.newFriend
-      });
+    axios
+      .post("http://localhost:5000/friends", friend)
+      .then(res => {
+        console.log(res);
+        this.setState({
+          postNewFriend: res.data
+        });
+      })
+      .catch(err => {
+        console.log(err);
     })
+  }
+
+  updateFriend = (id, friend) => {
+    axios
+      .put(`http://localhost:5000/friends/${id}`, friend)
+      .then(res => {
+        console.log(res)
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 
   render () {
@@ -39,7 +56,9 @@ class App extends React.Component {
       <div className="App">
         <Friends 
           friendsData={this.state.friends}
-          postFriend={this.postFriend}
+        />
+        <FriendsForm 
+         postFriend={this.postFriend}
         />
       </div>
     );

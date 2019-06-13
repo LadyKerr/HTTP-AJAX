@@ -1,5 +1,4 @@
 import React from 'react';
-import FriendsForm from './FriendsForm';
 
 
 const Friends = props => {
@@ -13,7 +12,6 @@ const Friends = props => {
             <h3> Email: {person.email} </h3>
         </div>
       ))}
-      <FriendsForm />
     </div>
   );
 }
