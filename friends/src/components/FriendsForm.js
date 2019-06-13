@@ -61,8 +61,12 @@ class FriendsForm extends React.Component {
             onChange={this.handleChange}
             value={this.state.friends.email}
             />
-            <button type="submit">POST New Friend</button>
         </form>
+          <button
+            className="btn" 
+            type="submit">
+            Add Friend
+          </button>
       </div>
     );
   }

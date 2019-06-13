@@ -31,23 +31,37 @@ class App extends React.Component {
       .post("http://localhost:5000/friends", friend)
       .then(res => {
         console.log(res);
-        this.setState({
-          postNewFriend: res.data
-        });
+        this.setState({ postNewFriend: res.data});
       })
       .catch(err => {
         console.log(err);
     })
   }
 
-  updateFriend = (id, friend) => {
+  // updateFriend = () => {
+  //   axios
+  //     .put(`http://localhost:5000/friends/${friend.id}`, friend)
+  //     .then(res => {
+  //       console.log(res)
+  //       this.setState({ 
+  //         friends: res.data,
+  //       })
+  //     })
+  //     .catch(err => {
+  //       console.log(err)
+  //     })
+  // }
+
+
+  deleteFriend = (e, friend) => {
+    e.preventDefault();
     axios
-      .put(`http://localhost:5000/friends/${id}`, friend)
+      .delete(`http://localhost:5000/friends/${friend.id}`)
       .then(res => {
-        console.log(res)
+        this.setState({ friends: res.data });
       })
       .catch(err => {
-        console.log(err)
+        console.log(err);
       })
   }
 
@@ -56,6 +70,8 @@ class App extends React.Component {
       <div className="App">
         <Friends 
           friendsData={this.state.friends}
+          deleteFriend={this.deleteFriend}
+          //  updateFriend={this.updateFriend}
         />
         <FriendsForm 
          postFriend={this.postFriend}
