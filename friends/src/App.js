@@ -26,9 +26,15 @@ class App extends React.Component {
     })
   }
 
-  postFriend = friend => {
+  //add new friend to state on server
+  postFriend = () => {
+    const newFriend = {
+      name: this.state.name,
+      age: this.state.age,
+      email: this.state.email
+    }
     axios
-      .post("http://localhost:5000/friends", friend)
+      .post("http://localhost:5000/friends", newFriend)
       .then(res => {
         console.log(res);
         this.setState({ postNewFriend: res.data});
@@ -38,30 +44,33 @@ class App extends React.Component {
     })
   }
 
-  // updateFriend = () => {
-  //   axios
-  //     .put(`http://localhost:5000/friends/${friend.id}`, friend)
-  //     .then(res => {
-  //       console.log(res)
-  //       this.setState({ 
-  //         friends: res.data,
-  //       })
-  //     })
-  //     .catch(err => {
-  //       console.log(err)
-  //     })
-  // }
-
-
-  deleteFriend = (e, friend) => {
-    e.preventDefault();
+  //update friend data on server
+  putFriend = () => {
+    const updateFriend = {
+      name: this.state.name,
+      age: this.state.age,
+      email: this.state.email
+    };
     axios
-      .delete(`http://localhost:5000/friends/${friend.id}`)
+      .put("http://localhost:5000/friends/4", updateFriend)
       .then(res => {
-        this.setState({ friends: res.data });
+        console.log(res)
       })
       .catch(err => {
-        console.log(err);
+        console.log(err)
+      })
+      this.setState({ name:'', age:'', email:'' })
+  };
+
+//delete friend from server
+  deleteFriend = () => {
+    axios
+      .delete("http://localhost:5000/friends/2")
+      .then(res => {
+        console.log(res)
+      })
+      .catch(err => {
+        console.log(err)
       })
   }
 
@@ -71,7 +80,7 @@ class App extends React.Component {
         <Friends 
           friendsData={this.state.friends}
           deleteFriend={this.deleteFriend}
-          //  updateFriend={this.updateFriend}
+          putFriend={this.putFriend}
         />
         <FriendsForm 
          postFriend={this.postFriend}

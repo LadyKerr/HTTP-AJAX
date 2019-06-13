@@ -23,6 +23,7 @@ class FriendsForm extends React.Component {
 
   postFriend = e => {
     e.preventDefault();
+    console.log(e);
     this.props.postFriend(this.state.friends);
     this.setState({
       friends: {

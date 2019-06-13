@@ -10,11 +10,8 @@ const Friends = props => {
           <h2> Name: {person.name} </h2>
             <h3> Age: {person.age} </h3>
             <h3> Email: {person.email} </h3>
-            <button
-              className="btn" 
-              onClick={e => props.deleteFriend(e, person.id)}> 
-              Delete Friend 
-            </button>
+              <button className="btn" onClick={props.deleteFriend}> Delete Friend </button>
+              <button className="btn" onClick={props.putFriend}> Update Friend </button>
         </div>
       ))}
     </div>
