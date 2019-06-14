@@ -1,93 +1,79 @@
 import React from 'react';
 import axios from 'axios';
-import Friends from './components/Friends';
-import FriendsForm from './components/FriendsForm';
+import { Route, withRouter } from 'react-router-dom';
 
+import FriendsForm from './components/FriendsForm';
+import FriendsList from './components/FriendsList';
+import Home from "./components/Home"
 import './App.css';
 
 class App extends React.Component {
-  constructor () {
-    super();
+  constructor (props) {
+    super(props);
+
     this.state = {
       friends: [],
-      postNewFriend: '',
+      error: '',
+      activeFriend: null
     }
   }
 
-  //setState to friends: res.data
+  
+  //setState to friends: res.data from get request
   componentDidMount() {
     axios
     .get("http://localhost:5000/friends")
-    .then(response => {
-      this.setState({ friends: response.data })
-    })
-    .catch(error => {
-      console.log(error);
-    })
+    .then(res => this.setState({ friends: res.data }))
+    .catch(err => this.setState({ error: err }))
   }
 
-  //add new friend to state on server
-  postFriend = () => {
-    const newFriend = {
-      name: this.state.name,
-      age: this.state.age,
-      email: this.state.email
-    }
+  //add new friend to state on server with post request
+  addFriend = (e, friend) => {
+    e.preventDefault();
     axios
-      .post("http://localhost:5000/friends", newFriend)
-      .then(res => {
-        console.log(res);
-        this.setState({ postNewFriend: res.data});
-      })
-      .catch(err => {
-        console.log(err);
-    })
+      .post("http://localhost:5000/friends", friend)
+      .then(res => this.setState({ friends: res.data}))
+      .catch(err => console.log(err))
   }
 
-  //update friend data on server
-  putFriend = () => {
-    const updateFriend = {
-      name: this.state.name,
-      age: this.state.age,
-      email: this.state.email
-    };
+  //update friend data on server with put request
+  updateFriend = (e, friend) => {
+    e.preventDefault();
     axios
-      .put("http://localhost:5000/friends/4", updateFriend)
-      .then(res => {
-        console.log(res)
-      })
-      .catch(err => {
-        console.log(err)
-      })
-      this.setState({ name:'', age:'', email:'' })
+      .put(`http://localhost:5000/friends/${friend.id}`, friend)
+      .then(res => this.setState({ friends: res.data }) )
+      .catch(err => console.log(err))
   };
 
-//delete friend from server
-  deleteFriend = () => {
+//delete friend from server with delete request
+  deleteFriend = (e, id) => {
+    e.preventDefault();
     axios
-      .delete("http://localhost:5000/friends/2")
-      .then(res => {
-        console.log(res)
-      })
-      .catch(err => {
-        console.log(err)
-      })
+      .delete(`http://localhost:5000/friends/${id}`)
+      .then(res => this.setState({ friends: res.data }) )
+      .catch(err => console.log(err))
+  }
+
+  //function for when friend is updated
+  setUpdateForm = (e, friend) => {
+    e.preventDefault();
+    this.setState({ activeFriend: friend })
   }
 
   render () {
     return (
       <div className="App">
-        <Friends 
-          friendsData={this.state.friends}
-          deleteFriend={this.deleteFriend}
-          putFriend={this.putFriend}
-        />
-        <FriendsForm 
-         postFriend={this.postFriend}
-        />
+        <Route exact path="/" component={Home} />
+        <Route 
+          exact path={"/friends-list" }
+          render={(props) => <> 
+            <FriendsForm addFriend={this.addFriend} updateFriend={this.updateFriend} activeFriend={this.state.activeFriend} /> 
+            <FriendsList {...props} friendsData={this.state.friends} setUpdateForm={this.setUpdateForm} deleteFriend={this.deleteFriend} />
+          </>}
+        /> 
       </div>
     );
   }
 }
 
-export default App;
+export default withRouter (App);

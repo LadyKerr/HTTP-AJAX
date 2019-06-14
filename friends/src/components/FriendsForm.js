@@ -1,50 +1,59 @@
 import React from 'react';
+import { NavLink } from "react-router-dom";
 
 class FriendsForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      friends: {
+      friend: this.props.activeFriend || {
         name: '',
         age: '',
-        email: ''
-      }
+        email: '',
+        id: 0
+      },
+      active: false
+    }
+  }
+
+  componentDidMount(prevProps) {
+    if ( this.props.activeFriend && prevProps.activeFriend !== this.props.activeFriend ) {
+      this.setState({ friend: this.props.activeFriend, active: true })
     }
   }
 
   handleChange = e => {
-    this.setState({
-      friends: {
-        ...this.state.friends,
-        [e.target.name]: e.target.value
-      }
-    })
+    e.persist();
+    this.setState(prevState => ({ friend: {...prevState.friend, [e.target.name]: e.target.value} }))
   }
 
-  postFriend = e => {
-    e.preventDefault();
-    console.log(e);
-    this.props.postFriend(this.state.friends);
+  submitHandler = (e, friend) => {
+    if ( this.state.active ) {
+      this.props.updateFriend(e, this.state.friend)
+    } else {
+      this.props.addFriend(e, this.state.friend)
+    }
     this.setState({
-      friends: {
+      friend: {
         name: '',
         age: '',
         email: ''
-      }
+      }, active: false
     });
   }
 
   render() {
     return(
       <div>
-        <h2>New Friends, Welcome!</h2>
-        <form onSubmit={this.postFriend}>
+        <NavLink to="/" >Home</NavLink> <br/>
+        <NavLink to="/friends-list" >View Friends</NavLink>
+        <form onSubmit={this.submitHandler}>
           <input 
             type="text"
             name="name" 
             placeholder="Name" 
             onChange={this.handleChange}
-            value={this.state.friends.name}
+            value={this.state.friend.name}
+            required
             />
           
           <input 
@@ -52,23 +61,23 @@ class FriendsForm extends React.Component {
             name="age" 
             placeholder="Age" 
             onChange = {this.handleChange}
-            value={this.state.friends.age}
+            value={this.state.friend.age}
+            required
             />
           
           <input 
             type="email"
             name="email" 
-            placeholder="Email" 
+            placeholder="E-mail" 
             onChange={this.handleChange}
-            value={this.state.friends.email}
+            value={this.state.friend.email}
+            required
             />
-        </form>
-          <button
-            className="btn" 
-            type="submit">
-            Add Friend
-          </button>
-      </div>
+          <button className="btn" >
+            {` ${this.state.active ? "Update" : "Add Friend"} `}
+        </button>
+      </form>    
+    </div>
     );
   }
 }

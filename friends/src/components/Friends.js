@@ -1,20 +1,15 @@
 import React from 'react';
 
-
 const Friends = props => {
   return (
     <div className="friends-container">
-      <h1>Welcome Lambda Friends!</h1>
-      {props.friendsData.map(person => (
-        <div key={person.id} className="friends-card">
-          <h2> Name: {person.name} </h2>
-            <h3> Age: {person.age} </h3>
-            <h3> Email: {person.email} </h3>
-              <button className="btn" onClick={props.deleteFriend}> Delete Friend </button>
-              <button className="btn" onClick={props.putFriend}> Update Friend </button>
-        </div>
-      ))}
+      <h2>{props.friend.name}</h2>
+      <h3> {props.friend.age} </h3>
+      <h3> {props.friend.email} </h3>
+      <button className="btn" onClick={(e) => props.setUpdateForm(e, props.friend)}> Update </button>
+      <button className="btn" onClick={(e) => props.deleteFriend(e, props.friend.id)}> Delete </button>
     </div>
   );
 }
+
 export default Friends;
